@@ -22,6 +22,9 @@ namespace Mastermind2_NielBeynaerts
 
         string[] selectedColors = new string[4];
         string[] randomColorSelection = new string[4];
+        string[,] guessingHistory = new string[10, 4];
+        SolidColorBrush[,] guessingHistoryFeedback = new SolidColorBrush[10, 4];
+
         int selectedColorPosition = 0;
 
         SolidColorBrush[] chosenColors = new SolidColorBrush[4]; // Initialize array to hold 4 colors
@@ -142,31 +145,64 @@ namespace Mastermind2_NielBeynaerts
             yellowRadioButton.IsChecked = false;
         }
 
+
+        private void DisplayGuessOnCanvas(string[] guess, int attempt)
+        {
+            const int labelWidth = 50;
+            const int labelHeight = 30;
+            const int labelMargin = 10;
+            int totalRowWidth = guess.Length * (labelWidth + labelMargin) - labelMargin; // Total width of the row
+            double canvasWidth = attemptCanvas.ActualWidth; // Width of the canvas
+            double startingLeft = (canvasWidth - totalRowWidth) / 2; // Center the row
+
+            int topPosition = attempt * (labelHeight + labelMargin); // Calculate top position based on the attempt number
+
+            for (int i = 0; i < guess.Length; i++)
+            {
+                Label label = new Label
+                {
+                    Width = labelWidth,
+                    Height = labelHeight,
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(guess[i])),
+                    Content = "",
+                    BorderThickness = new Thickness(1),
+                    BorderBrush = Brushes.Black,
+                };
+
+                Canvas.SetLeft(label, startingLeft + i * (labelWidth + labelMargin));
+                Canvas.SetTop(label, topPosition);
+
+                attemptCanvas.Children.Add(label);
+            }
+        }
+
+
         private void validateColorCode_Click(object sender, RoutedEventArgs e)
         {
-            // Define an array of buttons corresponding to each selected color
             Button[] buttons = { color1Button, color2Button, color3Button, color4Button };
 
-            // Loop through each selected color and its corresponding button
             for (int i = 0; i < selectedColors.Length; i++)
             {
-                // Check for an exact match
+                guessingHistory[attempts - 1, i] = selectedColors[i];
                 if (selectedColors[i] == randomColorSelection[i])
                 {
                     SetButtonStyle(buttons[i], new Thickness(2, 2, 2, 20), Colors.DarkRed);
                 }
-                // Check for a partial match
                 else if (randomColorSelection.Contains(selectedColors[i]))
                 {
                     SetButtonStyle(buttons[i], new Thickness(2, 2, 2, 20), Colors.Wheat);
                 }
-
-                if (selectedColors[0] == randomColorSelection[0] && selectedColors[1] == randomColorSelection[1] && selectedColors[2] == randomColorSelection[2] && selectedColors[3] == randomColorSelection[3])
-                {
-                    Close();
-                    StopCountdown();
-                }
             }
+
+            // Display the guess on the canvas
+            DisplayGuessOnCanvas(selectedColors, attempts);
+
+            if (selectedColors[0] == randomColorSelection[0] && selectedColors[1] == randomColorSelection[1] && selectedColors[2] == randomColorSelection[2] && selectedColors[3] == randomColorSelection[3])
+            {
+                Close();
+                StopCountdown();
+            }
+
             attempts++;
             if (attempts > 10)
             {
@@ -176,15 +212,14 @@ namespace Mastermind2_NielBeynaerts
             StopCountdown();
             StartCountdown();
             this.Title = $"Poging {attempts}";
-
         }
+
 
         private void SetButtonStyle(Button button, Thickness thickness, Color color)
         {
             button.BorderThickness = thickness;
             button.BorderBrush = new SolidColorBrush(color);
         }
-
 
         private void ToggleDebug()
         {
