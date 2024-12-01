@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mastermind2_NielBeynaerts"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="800">
+        Title="MainWindow" Height="1000" Width="800"
+        Closing="Window_Closing">
     <Grid>
         <Label Content="Klik op 1 van de boxen om een kleur te kiezen" HorizontalAlignment="Center" Margin="0,31,0,0" VerticalAlignment="Top"/>
         <Button x:Name="color1Button" Content="Kleur 1" HorizontalAlignment="Left" Margin="215,72,0,0" VerticalAlignment="Top" Height="73" Width="90" Click="color1Button_Click"/>

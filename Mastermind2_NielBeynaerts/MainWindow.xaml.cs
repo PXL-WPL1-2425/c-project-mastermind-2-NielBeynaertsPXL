@@ -325,7 +325,15 @@ namespace Mastermind2_NielBeynaerts
 
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Weet je zeker dat je het spel wilt beëindigen?", "Afsluiten", MessageBoxButton.YesNo);
 
-
+            if (result == MessageBoxResult.No)
+            {
+                // Annuleer het afsluiten van de applicatie
+                e.Cancel = true;
+            }
+        }
     }
 }
