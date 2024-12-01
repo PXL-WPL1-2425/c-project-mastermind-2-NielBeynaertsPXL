@@ -207,18 +207,57 @@ namespace Mastermind2_NielBeynaerts
 
             if (selectedColors[0] == randomColorSelection[0] && selectedColors[1] == randomColorSelection[1] && selectedColors[2] == randomColorSelection[2] && selectedColors[3] == randomColorSelection[3])
             {
-                Close();
                 StopCountdown();
+
+                MessageBoxResult result = MessageBox.Show($"Code is gekraakt in {attempts} pogingen, wil je nog eens?", $"WINNER", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    ResetGame(); // Herstart het spel
+                }
+                else
+                {
+                    Close(); // Sluit de applicatie
+                }
             }
+
 
             attempts++;
             if (attempts > 10)
             {
-                MessageBox.Show("You have reached the maximum amount of guesses");
-                Close();
+                MessageBoxResult result = MessageBox.Show($"Je hebt het maximaal aantal pogingen bereikt, wil je nog eens?", $"WINNER", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (result == MessageBoxResult.Yes)
+                {
+                    ResetGame(); // Herstart het spel
+                }
+                else
+                {
+                    Close(); // Sluit de applicatie
+                }
             }
             StopCountdown();
             StartCountdown();
+            this.Title = $"Poging {attempts}";
+        }
+        private void ResetGame()
+        {
+            // Reset alle variabelen
+            attempts = 0;
+            points = 100;
+            selectedColors = new string[4];
+            randomColorSelection = new string[4];
+            guessingHistory = new string[10, 4];
+            guessingHistoryFeedback = new SolidColorBrush[10, 4];
+            selectedColorPosition = 0;
+
+            // Reset UI-componenten
+            attemptCanvas.Children.Clear(); // Verwijder alle eerdere gissingen van het canvas
+            pointsLabel.Content = points.ToString(); // Reset de puntenweergave
+            timerLabel.Content = "0"; // Reset de timerweergave
+
+            // Genereer een nieuwe kleurcode
+            CreateRandomColorCombination();
+
+            // Update de titel
             this.Title = $"Poging {attempts}";
         }
 
