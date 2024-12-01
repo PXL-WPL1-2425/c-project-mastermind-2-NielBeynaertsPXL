@@ -32,6 +32,7 @@ namespace Mastermind2_NielBeynaerts
         private DispatcherTimer timer = new DispatcherTimer();
 
         int attempts = 0;
+        int points = 100;
         public MainWindow()
         {
             InitializeComponent();
@@ -191,6 +192,13 @@ namespace Mastermind2_NielBeynaerts
                 else if (randomColorSelection.Contains(selectedColors[i]))
                 {
                     SetButtonStyle(buttons[i], new Thickness(2, 2, 2, 20), Colors.Wheat);
+                    points -= 1;
+                    pointsLabel.Content = points.ToString();
+                }
+                else
+                {
+                    points -= 2;
+                    pointsLabel.Content = points.ToString();
                 }
             }
 
