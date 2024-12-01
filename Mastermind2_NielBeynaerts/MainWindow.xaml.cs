@@ -22,7 +22,6 @@ namespace Mastermind2_NielBeynaerts
 
         string[] selectedColors = new string[4];
         string[] randomColorSelection = new string[4];
-        string[,] guessingHistory = new string[10, 4];
         SolidColorBrush[,] guessingHistoryFeedback = new SolidColorBrush[10, 4];
 
         int selectedColorPosition = 0;
@@ -149,28 +148,25 @@ namespace Mastermind2_NielBeynaerts
 
         private void DisplayGuessOnCanvas(string[] guess, int attempt)
         {
-            const int labelWidth = 50;
-            const int labelHeight = 30;
-            const int labelMargin = 10;
-            int totalRowWidth = guess.Length * (labelWidth + labelMargin) - labelMargin; // Total width of the row
-            double canvasWidth = attemptCanvas.ActualWidth; // Width of the canvas
-            double startingLeft = (canvasWidth - totalRowWidth) / 2; // Center the row
+            int totalRowWidth = 250;
+            double canvasWidth = attemptCanvas.ActualWidth;
+            double startingLeft = (canvasWidth - totalRowWidth) / 2;
 
-            int topPosition = attempt * (labelHeight + labelMargin); // Calculate top position based on the attempt number
+            int topPosition = attempt * (30 + 10);
 
             for (int i = 0; i < guess.Length; i++)
             {
                 Label label = new Label
                 {
-                    Width = labelWidth,
-                    Height = labelHeight,
+                    Width = 50,
+                    Height = 30,
                     Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(guess[i])),
                     Content = "",
                     BorderThickness = new Thickness(1),
                     BorderBrush = Brushes.Black,
                 };
 
-                Canvas.SetLeft(label, startingLeft + i * (labelWidth + labelMargin));
+                Canvas.SetLeft(label, startingLeft + i * (50 + 10));
                 Canvas.SetTop(label, topPosition);
 
                 attemptCanvas.Children.Add(label);
@@ -184,7 +180,6 @@ namespace Mastermind2_NielBeynaerts
 
             for (int i = 0; i < selectedColors.Length; i++)
             {
-                guessingHistory[attempts - 1, i] = selectedColors[i];
                 if (selectedColors[i] == randomColorSelection[i])
                 {
                     SetButtonStyle(buttons[i], new Thickness(2, 2, 2, 20), Colors.DarkRed);
@@ -245,7 +240,6 @@ namespace Mastermind2_NielBeynaerts
             points = 100;
             selectedColors = new string[4];
             randomColorSelection = new string[4];
-            guessingHistory = new string[10, 4];
             guessingHistoryFeedback = new SolidColorBrush[10, 4];
             selectedColorPosition = 0;
 
